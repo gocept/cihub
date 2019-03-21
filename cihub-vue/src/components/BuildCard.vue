@@ -1,6 +1,6 @@
 <template>
   <div class="card" :class="colorClass">
-    <span>{{build.name}}</span>
+    <span class="name">{{build.name}}</span>
     <span>{{time}} {{date}}</span>
     <a :href="build.url"><span>{{build.buildnumber}}</span></a>
   </div>
@@ -40,20 +40,27 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .card {
-  flex: 0 0 200px;
+  font-family: "SourceSansSemi";
+  flex: 0 0 300px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 7px 15px 15px 15px;
 }
 .card-success {
-  background-color: green;
+  background-color: #3AB20C;
 }
 .card-unknown {
-  background-color: yellow;
+  background-color: #C8CAFF;
 }
 .card-failure {
-  background-color: red;
+  background-color: #CC4B0E;
+}
+.name {
+  font-size: 2.8rem;
 }
 </style>
 
