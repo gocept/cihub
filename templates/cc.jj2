@@ -1,0 +1,10 @@
+<Projects>
+{%- for item in data %}
+    <Project name="{{ item.name }}"
+             activity="Sleeping"
+             lastBuildStatus="{{ item.status }}"
+             lastBuildLabel="{{ item.buildnumber }}"
+             lastBuildTime="{{ item.timestamp }}"
+             webUrl="{{ item.url }}"/>
+{%- endfor %}
+</Projects>
