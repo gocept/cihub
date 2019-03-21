@@ -17,11 +17,12 @@ Installation
 * cd cihub
 * python3.7 -m venv .
 * bin/pip install -r requirements.txt
+* bin/python cihub.py --init-db
 
 Usage
 =====
 
-* bin/python main.py
+* bin/python cihub.py
 
 Starts server on http://0.0.0.0:8000
 
