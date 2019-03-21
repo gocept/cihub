@@ -13,6 +13,7 @@ export default {
 <style scoped>
 .build-overview {
   display: flex;
+  flex-wrap: wrap;
 }
 </style>
 
