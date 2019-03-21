@@ -1,0 +1,8 @@
+Click==7.0
+h11==0.8.1
+httptools==0.0.13
+pytz==2018.9
+starlette==0.11.4
+uvicorn==0.6.1
+uvloop==0.12.2
+websockets==7.0
