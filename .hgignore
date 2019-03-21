@@ -3,3 +3,5 @@ syntax: glob
 bin/
 lib/
 pyvenv.cfg
+cihub-vue/node_modules
+include/
