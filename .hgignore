@@ -1,6 +1,8 @@
 syntax: glob
 
+__pycache__/
 bin/
+cihub.db
 lib/
 pyvenv.cfg
 cihub-vue/node_modules
