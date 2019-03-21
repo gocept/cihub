@@ -2,6 +2,7 @@ from db import StatusEnum
 from db import ci_status
 from db import database
 from db import initialize_database
+from db import install_example_data
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
@@ -112,14 +113,20 @@ if __name__ == '__main__':
         '--init-db', help='Initialize the database and quit.',
         action='store_true')
     parser.add_argument(
+        '--example-data', help='Put example data into the database and quit.',
+        action='store_true')
+    parser.add_argument(
         '--debug', help='Start in debug mode - do not use in production.',
         action='store_true')
     args = parser.parse_args()
 
     if args.init_db:
-        print('Initializing database')
         initialize_database()
-        print('Done.')
+        print('Initialized database.')
+        sys.exit(0)
+    if args.example_data:
+        install_example_data()
+        print('Put example data into database')
         sys.exit(0)
     if args.debug:
         app.debug = True
