@@ -1,9 +1,10 @@
 syntax: glob
 
+.env
 __pycache__/
 bin/
+cihub-vue/node_modules
 cihub.db
+include/
 lib/
 pyvenv.cfg
-cihub-vue/node_modules
-include/

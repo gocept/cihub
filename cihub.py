@@ -1,9 +1,13 @@
+from auth import BasicAuthBackend
+from auth import on_auth_error
 from db import StatusEnum
 from db import ci_status
 from db import database
 from db import initialize_database
 from db import install_example_data
 from starlette.applications import Starlette
+from starlette.authentication import requires
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 import argparse
@@ -14,6 +18,9 @@ import uvicorn
 
 
 app = Starlette()
+app.add_middleware(AuthenticationMiddleware,
+                   backend=BasicAuthBackend(),
+                   on_error=on_auth_error)
 templates = Jinja2Templates(directory='templates')
 
 
@@ -61,6 +68,7 @@ async def shutdown():
 
 
 @app.route('/cc.xml')
+@requires('authenticated')
 async def cc_xml(request):
     """Return the collected data in cc.xml format."""
     data = [x async for x in fetch_ci_status()]
@@ -71,6 +79,7 @@ async def cc_xml(request):
 
 
 @app.route('/cc.json')
+@requires('authenticated')
 async def cc_json(request):
     """Return the collected data in JSON format."""
     data = [x async for x in fetch_ci_status()]
@@ -78,6 +87,7 @@ async def cc_json(request):
 
 
 @app.route("/api/jenkins.json", methods=["POST"])
+@requires('authenticated')
 async def post_from_jenkins(request):
     """Store data posted by Jenkins."""
     data = await request.json()

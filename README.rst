@@ -17,6 +17,8 @@ Installation
 * cd cihub
 * python3.7 -m venv .
 * bin/pip install -r requirements.txt
+* cp .env.in .env
+* vi .env
 * bin/python cihub.py --init-db
 
 Fill database with example content:
