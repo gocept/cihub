@@ -19,6 +19,11 @@ Installation
 * bin/pip install -r requirements.txt
 * bin/python cihub.py --init-db
 
+Fill database with example content:
+
+* bin/python cihub.py --example-data
+
+
 Usage
 =====
 
