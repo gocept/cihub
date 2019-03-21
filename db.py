@@ -1,7 +1,7 @@
+from config import config
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database
 from sqlalchemy_utils import database_exists
-from starlette.config import Config
 import databases
 import datetime
 import enum
@@ -9,8 +9,6 @@ import pytz
 import sqlalchemy
 
 
-# Configuration from environment variables or '.env' file.
-config = Config('.env')
 DATABASE_URL = config('DATABASE_URL')
 
 
