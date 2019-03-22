@@ -94,7 +94,7 @@ async def post_from_jenkins(request):
     status_data = dict(
         url=build['full_url'],
         buildnumber=build['number'],
-        status=StatusEnum(build['status']),
+        status=StatusEnum[build['status']],
         timestamp=datetime.datetime.now(pytz.UTC),
     )
 

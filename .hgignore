@@ -1,10 +1,12 @@
 syntax: glob
 
 .env
+.pytest_cache
 __pycache__/
 bin/
 cihub-vue/node_modules
 cihub.db
 include/
 lib/
+lib64/
 pyvenv.cfg
