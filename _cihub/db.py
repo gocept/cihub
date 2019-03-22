@@ -33,9 +33,10 @@ class StatusEnum(enum.Enum):
     FAILURE = 'Failure'
     ABORTED = 'Unknown'
 
-    @classmethod
-    def _missing_(cls, value):
-        return StatusEnum.Unknown
+    # Bitbucket Pipelines status mapping
+    SUCCESSFUL = 'Success'
+    FAILED = 'Failure'
+    INPROGRESS = 'Unknown'
 
 
 # Database table definitions.
