@@ -8,6 +8,7 @@ Requirements
 ============
 
 * Python 3.7
+* pipenv
 
 
 Installation
@@ -15,8 +16,7 @@ Installation
 
 * hg clone
 * cd cihub
-* python3.7 -m venv .
-* bin/pip install -r requirements.txt
+* pipenv install
 * cp .env.in .env
 * vi .env
 * bin/python cihub.py --init-db
