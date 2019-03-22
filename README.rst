@@ -55,3 +55,13 @@ From Jenkins
     - Protokoll: HTTP
     - Event: "Job completed"
     - URL Source: https://<cihub-host:port>/api/jenkins.json
+
+
+From Bitbucket Pipelines
+------------------------
+
+* Create a `webhook <https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html>`_
+* URL: https://<cihub-host:port>/api/bitbucket.json
+* Choose from a full list of triggers:
+
+    - Build status updated

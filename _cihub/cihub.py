@@ -117,6 +117,20 @@ async def post_from_jenkins(request):
         url=build['full_url'],
         buildnumber=build['number'],
         status=build['status'])
+    return JSONResponse("ok")
 
 
+@app.route("/api/bitbucket.json", methods=["POST"])
+@requires('authenticated')
+async def bitbucket_pipelines_ci_status(request):
+    """Store data posted by Bitbucket pipelines."""
+    data = await request.json()
+
+    name = data['repository']['name']
+    commit_status = data['commit_status']
+    await store(
+        name,
+        url=commit_status['url'],
+        buildnumber=0,
+        status=commit_status['state'])
     return JSONResponse("ok")
