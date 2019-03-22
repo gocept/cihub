@@ -1,11 +1,13 @@
 syntax: glob
 
+.coverage
 .env
 .pytest_cache
 __pycache__/
 bin/
 cihub-vue/node_modules
 cihub.db
+htmlcov/
 include/
 lib/
 lib64/

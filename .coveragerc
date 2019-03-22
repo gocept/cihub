@@ -1,0 +1,9 @@
+[run]
+branch = True
+source = _cihub
+
+[report]
+precision = 2
+skip_covered = True
+fail_under = 76
+
