@@ -30,7 +30,7 @@ class StatusEnum(enum.Enum):
     # Jenkins status mapping
     SUCCESS = 'Success'
     UNSTABLE = 'Failure'
-    FAILURE = 'Exception'
+    FAILURE = 'Failure'
     ABORTED = 'Unknown'
 
     @classmethod
