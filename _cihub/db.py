@@ -1,4 +1,4 @@
-from config import config
+from _cihub.config import config
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database
 from sqlalchemy_utils import database_exists

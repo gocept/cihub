@@ -1,4 +1,4 @@
-from config import config
+from _cihub.config import config
 from starlette.authentication import AuthCredentials
 from starlette.authentication import AuthenticationBackend
 from starlette.authentication import AuthenticationError
