@@ -52,6 +52,30 @@ async def fetch_ci_status():
         }
 
 
+async def store(name, *, url, buildnumber, status):
+    """Store job date int the database."""
+    query = ci_status.select().where(ci_status.c.id == name)
+    existing = await database.fetch_all(query)
+
+    status_data = dict(
+        url=url,
+        buildnumber=buildnumber,
+        status=StatusEnum[status],
+        timestamp=datetime.datetime.now(pytz.UTC),
+    )
+
+    if len(existing):
+        query = (
+            ci_status.update()
+            .where(ci_status.c.id == name)
+            .values(status_data))
+    else:
+        status_data['id'] = name
+        query = ci_status.insert().values(status_data)
+
+    await database.execute(query)
+
+
 @app.on_event("startup")
 async def startup():
     await database.connect()
@@ -87,25 +111,12 @@ async def post_from_jenkins(request):
     """Store data posted by Jenkins."""
     data = await request.json()
     name = data['display_name']
-    query = ci_status.select().where(ci_status.c.id == name)
-    existing = await database.fetch_all(query)
-
     build = data['build']
-    status_data = dict(
+    await store(
+        name,
         url=build['full_url'],
         buildnumber=build['number'],
-        status=StatusEnum[build['status']],
-        timestamp=datetime.datetime.now(pytz.UTC),
-    )
+        status=build['status'])
 
-    if len(existing):
-        query = (
-            ci_status.update()
-            .where(ci_status.c.id == name)
-            .values(status_data))
-    else:
-        status_data['id'] = name
-        query = ci_status.insert().values(status_data)
 
-    await database.execute(query)
     return JSONResponse("ok")
