@@ -19,17 +19,19 @@ Installation
 * pipenv install
 * cp .env.in .env
 * vi .env
-* bin/python cihub.py --init-db
+* pipenv shell
+* python cihub.py --init-db
 
 Fill database with example content:
 
-* bin/python cihub.py --example-data
+* python cihub.py --example-data
 
 
 Usage
 =====
 
-* bin/python cihub.py
+* pipenv shell
+* python cihub.py
 
 Starts server on http://0.0.0.0:8000
 
