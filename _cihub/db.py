@@ -9,7 +9,15 @@ import pytz
 import sqlalchemy
 
 
-DATABASE_URL = config('DATABASE_URL')
+DATABASE_URL = config('DATABASE_URL', cast=databases.DatabaseURL)
+TESTING = config('TESTING', cast=bool, default=False)
+TEST_DATABASE_URL = DATABASE_URL.replace(
+    database='test_' + DATABASE_URL.database)
+
+if TESTING:
+    database = databases.Database(TEST_DATABASE_URL)
+else:
+    database = databases.Database(DATABASE_URL)
 
 
 class StatusEnum(enum.Enum):
@@ -42,9 +50,6 @@ ci_status = sqlalchemy.Table(
     sqlalchemy.Column("status", sqlalchemy.Enum(StatusEnum)),
     sqlalchemy.Column("timestamp", sqlalchemy.DateTime(timezone=True)),
 )
-
-
-database = databases.Database(DATABASE_URL)
 
 
 def initialize_database():
