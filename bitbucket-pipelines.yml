@@ -7,4 +7,5 @@ pipelines:
         script:
           - pip install pipenv
           - pipenv install --dev
+          - cp .env.in .env
           - pipenv run pytest
