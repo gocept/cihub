@@ -37,6 +37,7 @@ class StatusEnum(enum.Enum):
     SUCCESSFUL = 'Success'
     FAILED = 'Failure'
     INPROGRESS = 'Unknown'
+    STOPPED = 'Unknown'
 
 
 # Database table definitions.
