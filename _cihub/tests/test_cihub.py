@@ -1,7 +1,8 @@
-from _cihub.db import ci_status
 from _cihub.db import StatusEnum
+from _cihub.db import ci_status
 from requests.auth import HTTPBasicAuth
 from sqlalchemy.sql import select
+import json
 
 jenkins_success_data = {
     'build':
@@ -228,7 +229,7 @@ def test_cihub__travis_ci_status__1(database, client):
     url = '/api/travis.json'
     response = client.post(
         url,
-        json=travis_success_data,
+        data={'payload': json.dumps(travis_success_data)},
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
