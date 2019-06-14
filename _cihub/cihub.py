@@ -9,6 +9,7 @@ from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 import datetime
+import json
 import pytz
 
 
@@ -140,7 +141,8 @@ async def bitbucket_pipelines_ci_status(request):
 @requires('authenticated')
 async def travis_ci_status(request):
     """Store data posted by TravisCI."""
-    data = await request.json()
+    form = await request.form()
+    data = json.loads(form['payload'])
 
     name = data['repository']['name']
     await store(

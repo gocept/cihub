@@ -24,6 +24,7 @@ Jinja2 = "*"
 MarkupSafe = "*"
 SQLAlchemy = "*"
 SQLAlchemy-Utils = "*"
+python-multipart = "*"
 
 [requires]
 python_version = "3.7"
