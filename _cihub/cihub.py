@@ -134,3 +134,18 @@ async def bitbucket_pipelines_ci_status(request):
         buildnumber=0,
         status=commit_status['state'])
     return JSONResponse("ok")
+
+
+@app.route("/api/travis.json", methods=["POST"])
+@requires('authenticated')
+async def travis_ci_status(request):
+    """Store data posted by TravisCI."""
+    data = await request.json()
+
+    name = data['repository']['name']
+    await store(
+        name,
+        url=data['build_url'],
+        buildnumber=data['number'],
+        status=data['status_message'].replace(' ', ''))
+    return JSONResponse("ok")

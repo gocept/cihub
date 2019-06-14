@@ -65,3 +65,11 @@ From Bitbucket Pipelines
 * Choose from a full list of triggers:
 
     - Build status updated
+
+From Travis CI
+--------------
+
+* Add to your `.travis.yml`::
+
+  notifications:
+      webhooks: https://<cihub-host:port>/api/travis.json
