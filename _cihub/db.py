@@ -39,6 +39,16 @@ class StatusEnum(enum.Enum):
     INPROGRESS = 'Unknown'
     STOPPED = 'Unknown'
 
+    # TravisCI status mapping
+    Pending = 'Unknown'
+    Passed = 'Success'
+    Fixed = 'Success'
+    Broken = 'Failure'
+    Failed = 'Failure'
+    StillFailing = 'Failure'
+    Canceled = 'Unknown'
+    Errored = 'Failure'
+
 
 # Database table definitions.
 metadata = sqlalchemy.MetaData()
