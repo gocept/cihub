@@ -4,7 +4,7 @@ const CihubApi = {}
 /* eslint-disable */
 CihubApi.install = function(Vue) {
   const axiosInstance = axios.create({
-    baseURL: `http://${window.location.host}/api/`
+    baseURL: `${window.location.protocol}//${window.location.host}/api/`
   });
   const backend = {};
   backend.loggedIn = false;
