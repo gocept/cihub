@@ -13,7 +13,7 @@ export default {
   name: 'BuildCard',
   data() {
     return {
-      colors: {
+      statusColors: {
         Success: 'card-success',
         Unknown: 'card-unknown',
         Failure: 'card-failure'
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     colorClass() {
-      return this.colors[this.build.status]
+      return this.statusColors[this.build.status]
     },
     date() {
       return this.dateObject.format('hh:mm')
@@ -44,20 +44,22 @@ export default {
 <style scoped>
 .card {
   font-family: "SourceSansSemi";
-  flex: 0 0 300px;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 7px 15px 15px 15px;
+  margin: 5px;
+  max-width: 33.3vw;
 }
 .card-success {
-  background-color: #3AB20C;
+  background-color: rgb(133, 184, 113);
 }
 .card-unknown {
   background-color: #C8CAFF;
 }
 .card-failure {
-  background-color: #CC4B0E;
+  background-color: rgb(248, 25, 9);
 }
 .name {
   font-size: 2.8rem;

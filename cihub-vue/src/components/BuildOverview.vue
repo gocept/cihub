@@ -14,6 +14,7 @@ export default {
 .build-overview {
   display: flex;
   flex-wrap: wrap;
+  padding: 30px 0;
 }
 </style>
 

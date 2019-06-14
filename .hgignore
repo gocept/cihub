@@ -6,6 +6,7 @@ syntax: glob
 __pycache__/
 bin/
 cihub-vue/node_modules
+cihub-vue/dist
 cihub.db
 htmlcov/
 include/
