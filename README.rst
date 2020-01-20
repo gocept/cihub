@@ -41,6 +41,19 @@ Known URLs
 * http://0.0.0.0:8000/cc.xml XML representation
 * http://0.0.0.0:8000/cc.json JSON representation
 
+Run tests
+=========
+
+* Installation:
+
+    - pipenv install --dev
+* Activation:
+
+    - pipenv shell
+* Execution:
+
+    - pipenv run pytest
+
 
 Pushing data to cihub
 =====================
