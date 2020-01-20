@@ -8,7 +8,7 @@ Requirements
 ============
 
 * Python 3.7
-* pipenv
+* pipenv (accessible via $PATH)
 
 
 Installation
