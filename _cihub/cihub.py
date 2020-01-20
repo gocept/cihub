@@ -151,3 +151,28 @@ async def travis_ci_status(request):
         buildnumber=data['number'],
         status=data['status_message'].replace(' ', ''))
     return JSONResponse("ok")
+
+
+@app.route("/api/github.json", methods=["POST"])
+@requires('authenticated')
+async def github_actions_status(request):
+    """Store data posted by Github for `check_suite` events."""
+    data = await request.json()
+    result = JSONResponse("ok")
+
+    if data["action"] != "completed":
+        return result
+
+    master_branch_name = data["repository"]["default_branch"]
+    if data["check_suite"]["head_branch"] != master_branch_name:
+        return result
+
+    html_url = data["repository"]["html_url"]
+    commit_id = data["check_suite"]["head_sha"]
+    suite_id = data["check_suite"]["id"]
+    await store(
+        name=data['repository']['name'],
+        url=f'{html_url}/commit/{commit_id}/checks?check_suite_id={suite_id}',
+        buildnumber=0,
+        status=data['check_suite']['conclusion'])
+    return result

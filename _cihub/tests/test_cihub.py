@@ -2,7 +2,10 @@ from _cihub.db import StatusEnum
 from _cihub.db import ci_status
 from requests.auth import HTTPBasicAuth
 from sqlalchemy.sql import select
+import copy
 import json
+import pytest
+
 
 jenkins_success_data = {
     'build':
@@ -245,3 +248,134 @@ def test_cihub__travis_ci_status__1(database, client):
         'https://travis-ci.org/lapolinar/docs/builds/545671425',
         566,
         StatusEnum.Failure)] == res
+
+
+@pytest.mark.parametrize('action', ('requested', 'rerequested'))
+def test_cihub__github_actions_status__1(database, client, action):
+    """It ignores actions besides `completed`."""
+    url = '/api/github.json'
+    payload = {
+        'action': action,
+    }
+    response = client.post(
+        url,
+        data=json.dumps(payload),
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    query = select([
+        ci_status.c.id,
+    ])
+    res = database.execute(query).fetchall()
+    assert [] == res
+
+github_success_data = {
+    "action": "completed",
+    "check_suite": {
+        "id": 118578147,
+        "node_id": "MDEwOkNoZWNrU3VpdGUxMTg1NzgxNDc=",
+        "head_branch": "changes",
+        "head_sha": "ec26c3e57ca3a959ca5aad62de7213c562f8c821",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://api.github.com/repos/Codertocat/Hello-World/check-suites/118578147",
+        "before": "6113728f27ae82c7b1a177c8d03f9e96e0adf246",
+        "after": "ec26c3e57ca3a959ca5aad62de7213c562f8c821",
+        "pull_requests": [],
+        "app": {
+            "id": 29310,
+            "node_id": "MDM6QXBwMjkzMTA=",
+            "owner": {
+                "login": "Octocoders",
+                "id": 38302899,
+                "node_id": "MDEyOk9yZ2FuaXphdGlvbjM4MzAyODk5",
+                "url": "https://api.github.com/users/Octocoders",
+                "html_url": "https://github.com/Octocoders",
+                "type": "Organization",
+                "site_admin": False
+            },
+        },
+        "created_at": "2019-05-15T15:20:31Z",
+        "updated_at": "2019-05-15T15:21:14Z",
+        "latest_check_runs_count": 1,
+        "check_runs_url": "https://api.github.com/repos/Codertocat/Hello-World/check-suites/118578147/check-runs",
+    },
+    "repository": {
+        "id": 186853002,
+        "node_id": "MDEwOlJlcG9zaXRvcnkxODY4NTMwMDI=",
+        "name": "Hello-World",
+        "full_name": "Codertocat/Hello-World",
+        "private": False,
+        "owner": {
+            "login": "Codertocat",
+            "id": 21031067,
+            "node_id": "MDQ6VXNlcjIxMDMxMDY3",
+            "type": "User",
+            "site_admin": False
+        },
+        "html_url": "https://github.com/Codertocat/Hello-World",
+        "description": None,
+        "fork": False,
+        "url": "https://api.github.com/repos/Codertocat/Hello-World",
+        "created_at": "2019-05-15T15:19:25Z",
+        "updated_at": "2019-05-15T15:21:14Z",
+        "pushed_at": "2019-05-15T15:20:57Z",
+        "git_url": "git://github.com/Codertocat/Hello-World.git",
+        "ssh_url": "git@github.com:Codertocat/Hello-World.git",
+        "clone_url": "https://github.com/Codertocat/Hello-World.git",
+        "homepage": None,
+        "size": 0,
+        "stargazers_count": 0,
+        "watchers_count": 0,
+        "language": "Ruby",
+        "default_branch": "changes"
+    },
+    "sender": {
+        "login": "Codertocat",
+        "id": 21031067,
+        "node_id": "MDQ6VXNlcjIxMDMxMDY3",
+        "type": "User",
+        "site_admin": False
+    }
+}  # noqa: E501
+
+
+def test_cihub__github_actions_status__2(database, client):
+    """It can import Github data of completed `check_suite` events."""
+    url = '/api/github.json'
+    response = client.post(
+        url,
+        data=json.dumps(github_success_data),
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    query = select([
+        ci_status.c.id,
+        ci_status.c.url,
+        ci_status.c.status,
+    ])
+    res = database.execute(query).fetchall()
+    assert [(
+        'Hello-World',
+        'https://github.com/Codertocat/Hello-World/commit/ec26c3e57ca3a959ca5aad62de7213c562f8c821/checks?check_suite_id=118578147',
+        StatusEnum.Success)] == res  # noqa: E501
+
+
+def test_cihub__github_actions_status__3(database, client):
+    """It drops completed `check_suite` events on branches."""
+    url = '/api/github.json'
+    data = copy.deepcopy(github_success_data)
+    data["check_suite"]["head_branch"] = 'my-branch'
+
+    response = client.post(
+        url,
+        data=json.dumps(data),
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+
+    assert response.status_code == 200
+    query = select([
+        ci_status.c.id,
+    ])
+    res = database.execute(query).fetchall()
+    assert [] == res
