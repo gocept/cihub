@@ -1,4 +1,4 @@
-name: Python application
+name: testing cihub
 
 on: [push]
 
