@@ -41,6 +41,32 @@ Known URLs
 * http://0.0.0.0:8000/cc.xml XML representation
 * http://0.0.0.0:8000/cc.json JSON representation
 
+Run tests
+=========
+
+* Installation:
+
+    - pipenv install --dev
+
+* Activation:
+
+    - pipenv shell
+
+* Execution:
+
+    - pipenv run pytest
+
+Update depencencies
+===================
+
+* Activation:
+
+    - pipenv shell
+
+* Execution:
+
+    - pipenv update --outdated
+    - pipenv update
 
 Pushing data to cihub
 =====================
@@ -73,6 +99,7 @@ From Travis CI
 
   notifications:
       webhooks: https://<cihub-host:port>/api/travis.json
+
 
 From GitHub Actions
 -------------------
