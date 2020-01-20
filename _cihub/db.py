@@ -65,7 +65,7 @@ ci_status = sqlalchemy.Table(
 
 
 def initialize_database():
-    url = DATABASE_URL
+    url = str(DATABASE_URL)
     engine = create_engine(url)
     assert not database_exists(url)
     create_database(url)
@@ -92,7 +92,7 @@ def install_example_data():
         'status': StatusEnum.Unknown,
         'timestamp': datetime.datetime.now(pytz.UTC) - datetime.timedelta(20),
     }]
-    url = DATABASE_URL
+    url = str(DATABASE_URL)
     assert database_exists(url)
     engine = create_engine(url)
     for data in EXAMPLE_DATA:
