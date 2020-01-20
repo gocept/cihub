@@ -73,3 +73,17 @@ From Travis CI
 
   notifications:
       webhooks: https://<cihub-host:port>/api/travis.json
+
+From GitHub Actions
+-------------------
+
+* Add a webhook in Settings --> Webhooks in the repository of for the
+  organization.
+* URL: https://<cihub-host:port>/api/github.json
+* Content type: ``application/json``
+* Secret: leave this field empty
+* Which events would you like to trigger this webhook?
+
+    - Choose „Let me select individual events.“
+    - Select only „Check suites“ (this may require to deselect some other
+      check boxes)

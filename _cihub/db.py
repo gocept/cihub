@@ -21,6 +21,8 @@ else:
 
 
 class StatusEnum(enum.Enum):
+    """Enum mapping status texts to internal representations."""
+
     # Status defined for cc.xml:
     Success = 'Success'
     Failure = 'Failure'
@@ -48,6 +50,14 @@ class StatusEnum(enum.Enum):
     StillFailing = 'Failure'
     Canceled = 'Unknown'
     Errored = 'Failure'
+
+    # Github actions status mapping
+    success = 'Success'
+    failure = 'Failure'
+    neutral = 'Unknown'
+    cancelled = 'Failure'
+    timed_out = 'Failure'
+    action_required = 'Unknown'
 
 
 # Database table definitions.
