@@ -14,7 +14,7 @@ Requirements
 Installation
 ============
 
-* hg clone
+* git clone
 * cd cihub
 * pipenv install
 * cp .env.in .env

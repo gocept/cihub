@@ -1,5 +1,3 @@
-syntax: glob
-
 .coverage
 .env
 .pytest_cache
