@@ -47,13 +47,26 @@ Run tests
 * Installation:
 
     - pipenv install --dev
+
 * Activation:
 
     - pipenv shell
+
 * Execution:
 
     - pipenv run pytest
 
+Update depencencies
+===================
+
+* Activation:
+
+    - pipenv shell
+
+* Execution:
+
+    - pipenv update --outdated
+    - pipenv update
 
 Pushing data to cihub
 =====================
@@ -86,3 +99,4 @@ From Travis CI
 
   notifications:
       webhooks: https://<cihub-host:port>/api/travis.json
+
