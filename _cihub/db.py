@@ -59,6 +59,10 @@ class StatusEnum(enum.Enum):
     timed_out = 'Failure'
     action_required = 'Unknown'
 
+    # GitLab CI status mapping
+    # success = 'Success'  # Same as in Github
+    canceled = 'Unknown'
+    failed = 'Failure'
 
 # Database table definitions.
 metadata = sqlalchemy.MetaData()

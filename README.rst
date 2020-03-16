@@ -104,7 +104,7 @@ From Travis CI
 From GitHub Actions
 -------------------
 
-* Add a webhook in Settings --> Webhooks in the repository of for the
+* Add a webhook in Settings --> Webhooks in the repository or for the
   organization.
 * URL: https://<cihub-host:port>/api/github.json
 * Content type: ``application/json``
@@ -114,3 +114,16 @@ From GitHub Actions
     - Choose „Let me select individual events.“
     - Select only „Check suites“ (this may require to deselect some other
       check boxes)
+
+From GitLab CI
+--------------
+
+* Add a webhook in Settings --> Webhooks in the repository or for the
+  organization.
+* URL: https://<cihub-host:port>/api/gitlab.json
+* Secret Token: leave this field empty.
+* Trigger:
+
+  - Select only "Job events" (thus deselect "Push events")
+
+* Add webhook.

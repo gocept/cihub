@@ -176,3 +176,28 @@ async def github_actions_status(request):
         buildnumber=0,
         status=data['check_suite']['conclusion'])
     return result
+
+
+@app.route("/api/gitlab.json", methods=["POST"])
+@requires('authenticated')
+async def gitlab_ci_status(request):
+    """Store data posted by Gitlab CI for job events."""
+    data = await request.json()
+    result = JSONResponse("ok")
+
+    if data['ref'] != 'master':
+        return result
+
+    status = data['build_status']
+    if getattr(StatusEnum, status, None) is None:
+        return result
+
+    homepage_url = data['repository']['homepage']
+    build_id = data['build_id']
+    await store(
+        name=data['repository']['name'],
+        url=f'{homepage_url}/-/jobs/{build_id}',
+        buildnumber=0,
+        status=data['build_status'])
+
+    return result

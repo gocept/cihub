@@ -379,3 +379,119 @@ def test_cihub__github_actions_status__3(database, client):
     ])
     res = database.execute(query).fetchall()
     assert [] == res
+
+
+gitlab_failure_data = {
+    'before_sha': '747acbe812396ccf9cc1b3652a78bb2f2b90b6c6',
+    'build_allow_failure': False,
+    'build_duration': 58.669351,
+    'build_failure_reason': 'script_failure',
+    'build_finished_at': '2020-03-16 15:40:08 UTC',
+    'build_id': 473425986,
+    'build_name': 'test',
+    'build_stage': 'test',
+    'build_started_at': '2020-03-16 15:39:09 UTC',
+    'build_status': 'failed',
+    'commit': {
+        'author_email': 'vv@example.com',
+        'author_name': 'Victor Vrba',
+        'author_url': 'https://gitlab.com/vv',
+        'duration': 58,
+        'finished_at': '2020-03-16 15:40:08 UTC',
+        'id': 126721029,
+        'message': 'Update .gitlab-ci.yml',
+        'sha': 'c538f4037ddda019d2e8b4db02f3d720f4696942',
+        'started_at': '2020-03-16 14:56:52 UTC',
+        'status': 'failed'
+    },
+    'object_kind': 'build',
+    'pipeline_id': 126721029,
+    'project_id': 17516850,
+    'project_name': 'Victor Vrba / test_cihub',
+    'ref': 'master',
+    'repository': {
+        'description': 'Tests for cihub gitlab CI integration ',
+        'git_http_url': 'https://gitlab.com/vv/test_cihub.git',
+        'git_ssh_url': 'git@gitlab.com:vv/test_cihub.git',
+        'homepage': 'https://gitlab.com/vv/test_cihub',
+        'name': 'test_cihub',
+        'url': 'git@gitlab.com:vv/test_cihub.git',
+        'visibility_level': 20
+    },
+    'runner': {
+        'active': True,
+        'description': 'shared-runners-manager-4.gitlab.com',
+        'id': 44949,
+        'is_shared': True
+    },
+    'sha': 'c538f4037ddda019d2e8b4db02f3d720f4696942',
+    'tag': False,
+    'user': {
+        'avatar_url': '',
+        'email': 'vv@example.com',
+        'name': 'Victor Vrba',
+        'username': 'vv'
+    }
+}
+
+
+@pytest.mark.parametrize('build_status', ('created', 'pending', 'running'))
+def test_cihub__gitlab_ci_status__1(database, client, build_status):
+    """It ignores inknown build_status values."""
+    url = '/api/gitlab.json'
+    payload = {
+        'ref': 'master',
+        'build_status': build_status,
+    }
+    response = client.post(
+        url,
+        data=json.dumps(payload),
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    query = select([
+        ci_status.c.id,
+    ])
+    res = database.execute(query).fetchall()
+    assert [] == res
+
+
+def test_cihub__gitlab_ci_status__2(database, client):
+    """It ignores runs which are not on master branch."""
+    url = '/api/gitlab.json'
+    payload = {
+        'ref': 'branch-xyz',
+    }
+    response = client.post(
+        url,
+        data=json.dumps(payload),
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    query = select([
+        ci_status.c.id,
+    ])
+    res = database.execute(query).fetchall()
+    assert [] == res
+
+
+def test_cihub__gitlab_ci_status__3(database, client):
+    """It stores completed result from master branch."""
+    url = '/api/gitlab.json'
+    response = client.post(
+        url,
+        data=json.dumps(gitlab_failure_data),
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    query = select([
+        ci_status.c.id,
+        ci_status.c.url,
+        ci_status.c.status,
+    ])
+    res = database.execute(query).fetchall()
+    assert [(
+        'test_cihub',
+        'https://gitlab.com/vv/test_cihub/-/jobs/473425986',
+        StatusEnum.Failure
+    )] == res
