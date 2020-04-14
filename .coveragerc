@@ -5,5 +5,5 @@ source = _cihub
 [report]
 precision = 2
 skip_covered = True
-fail_under = 87
+fail_under = 88
 

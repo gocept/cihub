@@ -34,6 +34,7 @@ def test_cihub__post_from_jenkins__1(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ok'
     query = select([ci_status.c.id, ci_status.c.status])
     res = database.execute(query).fetchall()
     assert [('test_name', StatusEnum.Success)] == res
@@ -83,6 +84,7 @@ def test_cihub__bitbucket_pipelines_ci_status__1(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ok'
     query = select([ci_status.c.id, ci_status.c.status])
     res = database.execute(query).fetchall()
     assert [('repo_name', StatusEnum.Success)] == res
@@ -236,6 +238,7 @@ def test_cihub__travis_ci_status__1(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ok'
     query = select([
         ci_status.c.id,
         ci_status.c.url,
@@ -261,7 +264,7 @@ def test_cihub__travis_ci_status__2(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
-    assert response.json() == 'ok'
+    assert response.json() == 'ignored - not on master'
     query = select([
         ci_status.c.id,
     ])
@@ -280,7 +283,7 @@ def test_cihub__travis_ci_status__3(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
-    assert response.json() == 'ok'
+    assert response.json() == 'ignored - PR'
     query = select([
         ci_status.c.id,
     ])
@@ -301,6 +304,7 @@ def test_cihub__github_actions_status__1(database, client, action):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ignored - not completed'
     query = select([
         ci_status.c.id,
     ])
@@ -387,6 +391,7 @@ def test_cihub__github_actions_status__2(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ok'
     query = select([
         ci_status.c.id,
         ci_status.c.url,
@@ -412,6 +417,7 @@ def test_cihub__github_actions_status__3(database, client):
     )
 
     assert response.status_code == 200
+    assert response.json() == 'ignored - not on master'
     query = select([
         ci_status.c.id,
     ])
@@ -487,6 +493,7 @@ def test_cihub__gitlab_ci_status__1(database, client, build_status):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ignored - no relevant state'
     query = select([
         ci_status.c.id,
     ])
@@ -506,6 +513,7 @@ def test_cihub__gitlab_ci_status__2(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ignored - not on master'
     query = select([
         ci_status.c.id,
     ])
@@ -522,6 +530,7 @@ def test_cihub__gitlab_ci_status__3(database, client):
         auth=HTTPBasicAuth('testuser', 'testword'),
     )
     assert response.status_code == 200
+    assert response.json() == 'ok'
     query = select([
         ci_status.c.id,
         ci_status.c.url,
