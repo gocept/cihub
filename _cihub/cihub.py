@@ -145,10 +145,10 @@ async def travis_ci_status(request):
     data = json.loads(form['payload'])
 
     if data['branch'] != 'master':
-        return JSONResponse("ok")
+        return JSONResponse("ignored - not on master")
 
     if data['pull_request']:
-        return JSONResponse("ok")
+        return JSONResponse("ignored - PR")
 
     name = data['repository']['name']
     await store(
@@ -164,14 +164,13 @@ async def travis_ci_status(request):
 async def github_actions_status(request):
     """Store data posted by Github for `check_suite` events."""
     data = await request.json()
-    result = JSONResponse("ok")
 
     if data["action"] != "completed":
-        return result
+        return JSONResponse("ignored - not completed")
 
     master_branch_name = data["repository"]["default_branch"]
     if data["check_suite"]["head_branch"] != master_branch_name:
-        return result
+        return JSONResponse("ignored - not on master")
 
     html_url = data["repository"]["html_url"]
     commit_id = data["check_suite"]["head_sha"]
@@ -181,7 +180,7 @@ async def github_actions_status(request):
         url=f'{html_url}/commit/{commit_id}/checks?check_suite_id={suite_id}',
         buildnumber=0,
         status=data['check_suite']['conclusion'])
-    return result
+    return JSONResponse("ok")
 
 
 @app.route("/api/gitlab.json", methods=["POST"])
@@ -189,14 +188,13 @@ async def github_actions_status(request):
 async def gitlab_ci_status(request):
     """Store data posted by Gitlab CI for job events."""
     data = await request.json()
-    result = JSONResponse("ok")
 
     if data['ref'] != 'master':
-        return result
+        return JSONResponse("ignored - not on master")
 
     status = data['build_status']
     if getattr(StatusEnum, status, None) is None:
-        return result
+        return JSONResponse("ignored - no relevant state")
 
     homepage_url = data['repository']['homepage']
     build_id = data['build_id']
@@ -206,4 +204,4 @@ async def gitlab_ci_status(request):
         buildnumber=0,
         status=data['build_status'])
 
-    return result
+    return JSONResponse("ok")
