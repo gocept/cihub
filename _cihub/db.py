@@ -124,7 +124,10 @@ def install_example_data():
 
 
 def wipe_older_than(days):
-    """Wipe entries which are older than the given number of days."""
+    """Wipe entries which are older than the given number of days.
+
+    Returns the number of deleted entries.
+    """
     assert days > 0
     engine = _get_db_engine()
 
