@@ -56,6 +56,13 @@ Run tests
 
     - pipenv run pytest
 
+Clean the database
+==================
+
+* pipenv shell
+* python cihub.py --wipe-older-than <NUMBER-of-DAYS>
+
+
 Update depencencies
 ===================
 

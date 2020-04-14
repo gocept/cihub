@@ -86,6 +86,17 @@ def initialize_database():
     metadata.create_all(engine)
 
 
+def _get_db_engine():
+    """Get an engine object for the currently defined database."""
+    if TESTING:
+        url = TEST_DATABASE_URL
+    else:
+        url = DATABASE_URL
+    url = str(url)
+    assert database_exists(url)
+    return create_engine(url)
+
+
 def install_example_data():
     EXAMPLE_DATA = [{
         'id': 'dgb.internet',
@@ -106,9 +117,18 @@ def install_example_data():
         'status': StatusEnum.Unknown,
         'timestamp': datetime.datetime.now(pytz.UTC) - datetime.timedelta(20),
     }]
-    url = str(DATABASE_URL)
-    assert database_exists(url)
-    engine = create_engine(url)
+    engine = _get_db_engine()
     for data in EXAMPLE_DATA:
         query = ci_status.insert().values(**data)
         engine.execute(query)
+
+
+def wipe_older_than(days):
+    """Wipe entries which are older than the given number of days."""
+    assert days > 0
+    engine = _get_db_engine()
+
+    borderline = (pytz.UTC.localize(datetime.datetime.now())
+                  - datetime.timedelta(days=days))
+    query = ci_status.delete().where(ci_status.c.timestamp < borderline)
+    return engine.execute(query).rowcount
