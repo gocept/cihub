@@ -144,6 +144,12 @@ async def travis_ci_status(request):
     form = await request.form()
     data = json.loads(form['payload'])
 
+    if data['branch'] != 'master':
+        return JSONResponse("ok")
+
+    if data['pull_request']:
+        return JSONResponse("ok")
+
     name = data['repository']['name']
     await store(
         name,
