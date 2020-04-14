@@ -250,6 +250,44 @@ def test_cihub__travis_ci_status__1(database, client):
         StatusEnum.Failure)] == res
 
 
+def test_cihub__travis_ci_status__2(database, client):
+    """It ignores builds which are not on `master`."""
+    url = '/api/travis.json'
+    data = travis_success_data.copy()
+    data['branch'] = 'issue-4'
+    response = client.post(
+        url,
+        data={'payload': json.dumps(data)},
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    assert response.json() == 'ok'
+    query = select([
+        ci_status.c.id,
+    ])
+    res = database.execute(query).fetchall()
+    assert len(res) == 0
+
+
+def test_cihub__travis_ci_status__3(database, client):
+    """It ignores builds on pull requests."""
+    url = '/api/travis.json'
+    data = travis_success_data.copy()
+    data['pull_request'] = True
+    response = client.post(
+        url,
+        data={'payload': json.dumps(data)},
+        auth=HTTPBasicAuth('testuser', 'testword'),
+    )
+    assert response.status_code == 200
+    assert response.json() == 'ok'
+    query = select([
+        ci_status.c.id,
+    ])
+    res = database.execute(query).fetchall()
+    assert len(res) == 0
+
+
 @pytest.mark.parametrize('action', ('requested', 'rerequested'))
 def test_cihub__github_actions_status__1(database, client, action):
     """It ignores actions besides `completed`."""
