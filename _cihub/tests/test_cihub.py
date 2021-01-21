@@ -311,6 +311,7 @@ def test_cihub__github_actions_status__1(database, client, action):
     res = database.execute(query).fetchall()
     assert [] == res
 
+
 github_success_data = {
     "action": "completed",
     "check_suite": {
@@ -320,7 +321,8 @@ github_success_data = {
         "head_sha": "ec26c3e57ca3a959ca5aad62de7213c562f8c821",
         "status": "completed",
         "conclusion": "success",
-        "url": "https://api.github.com/repos/Codertocat/Hello-World/check-suites/118578147",
+        "url": "https://api.github.com/repos/Codertocat/Hello-World/"
+               "check-suites/118578147",
         "before": "6113728f27ae82c7b1a177c8d03f9e96e0adf246",
         "after": "ec26c3e57ca3a959ca5aad62de7213c562f8c821",
         "pull_requests": [],
@@ -340,7 +342,8 @@ github_success_data = {
         "created_at": "2019-05-15T15:20:31Z",
         "updated_at": "2019-05-15T15:21:14Z",
         "latest_check_runs_count": 1,
-        "check_runs_url": "https://api.github.com/repos/Codertocat/Hello-World/check-suites/118578147/check-runs",
+        "check_runs_url": "https://api.github.com/repos/Codertocat/"
+                          "Hello-World/check-suites/118578147/check-runs",
     },
     "repository": {
         "id": 186853002,
@@ -400,7 +403,9 @@ def test_cihub__github_actions_status__2(database, client):
     res = database.execute(query).fetchall()
     assert [(
         'Hello-World',
-        'https://github.com/Codertocat/Hello-World/commit/ec26c3e57ca3a959ca5aad62de7213c562f8c821/checks?check_suite_id=118578147',
+        'https://github.com/Codertocat/Hello-World/commit/'
+        'ec26c3e57ca3a959ca5aad62de7213c562f8c821/checks?'
+        'check_suite_id=118578147',
         StatusEnum.Success)] == res  # noqa: E501
 
 

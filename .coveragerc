@@ -6,4 +6,3 @@ source = _cihub
 precision = 2
 skip_covered = True
 fail_under = 88
-

@@ -1,7 +1,7 @@
+from _cihub.cihub import app
 from _cihub.db import initialize_database
 from _cihub.db import install_example_data
 from _cihub.db import wipe_older_than
-from _cihub.cihub import app
 import argparse
 import sys
 import uvicorn

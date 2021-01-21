@@ -1,8 +1,11 @@
-import pytest
+from sqlalchemy import create_engine
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import database_exists
+from sqlalchemy_utils import drop_database
 from starlette.config import environ
 from starlette.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database, drop_database
+import pytest
+
 
 # This sets `os.environ`, but provides some additional protection.
 # If we placed it below the application import, it would raise an error
@@ -11,10 +14,10 @@ environ['TESTING'] = 'True'
 environ['username'] = 'testuser'
 environ['password'] = 'testword'
 
-from _cihub.cihub import app  # noqa: E401
-from _cihub.config import config  # noqa: E401
-from _cihub.db import TEST_DATABASE_URL  # noqa: E401
-from _cihub.db import metadata  # noqa: E401
+from _cihub.cihub import app  # noqa: E401, E402
+from _cihub.config import config  # noqa: F401, E402
+from _cihub.db import TEST_DATABASE_URL  # noqa: E401, E402
+from _cihub.db import metadata  # noqa: E401, E402
 
 
 @pytest.fixture(scope="function")
@@ -35,6 +38,7 @@ def database():
     metadata.create_all(engine)
     yield engine
     drop_database(url)
+
 
 @pytest.fixture()
 def client():
