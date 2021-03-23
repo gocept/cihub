@@ -4,8 +4,6 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
-    type: [ "opened", "reopened", "synchronize" ]
   schedule:
     - cron: '0 5 * * MON-FRI'
 
