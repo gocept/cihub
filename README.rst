@@ -104,8 +104,8 @@ From Travis CI
 
 * Add to your `.travis.yml`::
 
-  notifications:
-      webhooks: https://<cihub-host:port>/api/travis.json
+    notifications:
+        webhooks: https://<cihub-host:port>/api/travis.json
 
 
 From GitHub Actions

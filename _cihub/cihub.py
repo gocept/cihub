@@ -40,6 +40,7 @@ EXAMPLE_DATA = [{
     'timestamp': '2005-09-28 10:30:34.6362160+01:00',
 }]
 
+
 async def fetch_ci_status():
     """Fetch all stored ci status."""
     query = ci_status.select().order_by(ci_status.c.id)

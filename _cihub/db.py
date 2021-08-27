@@ -64,6 +64,7 @@ class StatusEnum(enum.Enum):
     canceled = 'Unknown'
     failed = 'Failure'
 
+
 # Database table definitions.
 metadata = sqlalchemy.MetaData()
 
